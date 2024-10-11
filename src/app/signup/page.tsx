@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -8,11 +8,57 @@ import {
   IconBrandGoogle,
   IconBrandOnlyfans,
 } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function SignupFormDemo() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+  // hook
+  const router = useRouter();
+
+  // State
+  const [formData,setFormData] = useState({
+    firstName:"",
+    lastName:"",
+    email:"",
+    password:""
+  })
+
+  // changeHandler
+  function changeHandler(e:any){
+    setFormData((prev)=>({
+      ...prev,
+      [e.target.name]:e.target.value
+    }))
+  }
+
+  // api call
+  async function signup(){
+    const tid = toast.loading("...Loading");
+    try {
+      const result = await axios.post("/api/users/signup",formData);
+      console.log("response",result.data.data);
+      router.push("/login");
+      toast.success("LoggedIn successfully");
+    } catch (error:any) {
+      console.log(error);
+    }
+    toast.dismiss(tid);
+  }
+
+  // submit Handler
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted");
+    
+    signup();
+
+    setFormData({
+      firstName:"",
+      lastName:"",
+      email:"",
+      password:""
+    });
   };
 
   return (
@@ -30,29 +76,29 @@ export default function SignupFormDemo() {
           <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
             <LabelInputContainer>
               <Label htmlFor="firstname">First name</Label>
-              <Input id="firstname" placeholder="Tyler" type="text" />
+              <Input id="firstname" placeholder="Tyler" type="text" name="firstName" value={formData.firstName} onChange={changeHandler} />
             </LabelInputContainer>
             <LabelInputContainer>
               <Label htmlFor="lastname">Last name</Label>
-              <Input id="lastname" placeholder="Durden" type="text" />
+              <Input id="lastname" placeholder="Durden" type="text" name="lastName" value={formData.lastName} onChange={changeHandler} />
             </LabelInputContainer>
           </div>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="email">Email Address</Label>
-            <Input id="email" placeholder="projectmayhem@fc.com" type="email" />
+            <Input id="email" placeholder="projectmayhem@fc.com" type="email" name="email" value={formData.email} onChange={changeHandler} />
           </LabelInputContainer>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" placeholder="••••••••" type="password" />
+            <Input id="password" placeholder="••••••••" type="password" name="password" value={formData.password} onChange={changeHandler} />
           </LabelInputContainer>
-          <LabelInputContainer className="mb-8">
+          {/* <LabelInputContainer className="mb-8">
             <Label htmlFor="twitterpassword">Your twitter password</Label>
             <Input
               id="twitterpassword"
               placeholder="••••••••"
               type="twitterpassword"
             />
-          </LabelInputContainer>
+          </LabelInputContainer> */}
 
           <button
             className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
@@ -69,38 +115,23 @@ export default function SignupFormDemo() {
               className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
               type="submit"
             >
-              <IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-              <span className="text-neutral-700 dark:text-neutral-300 text-sm">
-                GitHub
-              </span>
-              <BottomGradient />
-            </button>
-            <button
-              className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-              type="submit"
-            >
               <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
               <span className="text-neutral-700 dark:text-neutral-300 text-sm">
                 Google
               </span>
               <BottomGradient />
             </button>
-            <button
-              className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-              type="submit"
-            >
-              <IconBrandOnlyfans className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-              <span className="text-neutral-700 dark:text-neutral-300 text-sm">
-                OnlyFans
-              </span>
-              <BottomGradient />
-            </button>
+            
           </div>
         </form>
       </div>
     </div>
   );
 }
+
+
+
+
 
 const BottomGradient = () => {
   return (
