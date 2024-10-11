@@ -4,9 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import {
-  IconBrandGithub,
   IconBrandGoogle,
-  IconBrandOnlyfans,
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -26,7 +24,7 @@ export default function SignupFormDemo() {
   })
 
   // changeHandler
-  function changeHandler(e:any){
+  function changeHandler(e:React.ChangeEvent<HTMLInputElement>){
     setFormData((prev)=>({
       ...prev,
       [e.target.name]:e.target.value
@@ -41,7 +39,7 @@ export default function SignupFormDemo() {
       console.log("response",result.data.data);
       router.push("/login");
       toast.success("LoggedIn successfully");
-    } catch (error:any) {
+    } catch (error:unknown) {
       console.log(error);
     }
     toast.dismiss(tid);

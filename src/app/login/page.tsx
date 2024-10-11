@@ -4,9 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import {
-  IconBrandGithub,
   IconBrandGoogle,
-  IconBrandOnlyfans,
 } from "@tabler/icons-react";
 
 export default function LoginPage() {
@@ -18,7 +16,7 @@ export default function LoginPage() {
   });
 
 
-  function handleChange(e:any){
+  function handleChange(e:React.ChangeEvent<HTMLInputElement>){
     setFormData(
       (prev)=>({
         ...prev,
