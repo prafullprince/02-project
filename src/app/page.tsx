@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -96,6 +97,10 @@ export default function Home() {
           Go to nextjs.org →
         </a>
       </footer>
+      <div className=" flex gap-8">
+        <Link className="bg-yellow-50 text-black px-3 py-1 border border-yellow-500 rounded-lg" href={"/signup"}>Signup</Link>
+        <Link className="bg-black text-white px-3 py-1 border rounded-lg" href={"/login"}>Login</Link>
+      </div>
     </div>
   );
 }

@@ -10,8 +10,9 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-export default function SignupFormDemo() {
 
+
+export default function SignupFormDemo() {
   // hook
   const router = useRouter();
 
@@ -38,7 +39,7 @@ export default function SignupFormDemo() {
       const result = await axios.post("/api/users/signup",formData);
       console.log("response",result.data.data);
       router.push("/login");
-      toast.success("LoggedIn successfully");
+      toast.success("Signup successfully");
     } catch (error:unknown) {
       console.log(error);
     }

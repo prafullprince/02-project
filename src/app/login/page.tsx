@@ -6,16 +6,21 @@ import { cn } from "@/lib/utils";
 import {
   IconBrandGoogle,
 } from "@tabler/icons-react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+  // import
+  const router = useRouter();
 
-
+  // state
   const [formData,setFormData] = useState({
     email:"",
     password:""
   });
 
-
+  // changeHandler
   function handleChange(e:React.ChangeEvent<HTMLInputElement>){
     setFormData(
       (prev)=>({
@@ -25,10 +30,28 @@ export default function LoginPage() {
     )
   }
 
+  // apiCall
+  async function onLogin(){
+    try {
+      const result = await axios.post("/api/users/login",formData);
+      if(!result.data.success){
+        return toast.error("error occured");
+      }
 
+      console.log("response is: ",result.data);
+      toast.success("LoggedIn Successfully");
+      router.push(`/profile/${result.data.user.firstName}`);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // submitHandler
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted",formData);
+
+    onLogin();
+
     setFormData({
       email:"",
       password:""
@@ -59,7 +82,7 @@ export default function LoginPage() {
             className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
             type="submit"
           >
-            Sign up &rarr;
+            Log in &rarr;
             <BottomGradient />
           </button>
 
@@ -83,6 +106,8 @@ export default function LoginPage() {
     </div>
   );
 }
+
+
 
 const BottomGradient = () => {
   return (

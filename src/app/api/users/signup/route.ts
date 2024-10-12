@@ -1,17 +1,17 @@
-import { dbConnect } from "@/config/database";
 import User from "@/models/userModel";
+import { dbConnect } from "@/config/database";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from 'bcryptjs';
 
 dbConnect();
 
 
+// SignupHandler
 export async function POST(request:NextRequest){
     try {
         // fetch data
         const reqBody = await request.json();
         const {firstName,lastName,email,password} = reqBody;
-        console.log("reqBody",reqBody);
 
         // validation
         if(!firstName || !lastName || !email || !password){
@@ -35,9 +35,9 @@ export async function POST(request:NextRequest){
         return NextResponse.json({message:"User created",success:true,data},{status:201});
 
 
-
     } catch (error:unknown) {
         console.log(error);
         return NextResponse.json({error:error,success:false},{status:500});
     }
 }
+
